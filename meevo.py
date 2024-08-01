@@ -150,8 +150,6 @@ def get_location_add_columns(ids):
                             employee_prices.add(str(opening.get('employeePrice')))
         driver.requests.clear()
         number_of_people = len(unique_employees)
-        # for all dates calculate what the day is on that date and add that to days_offered_micro_braids
-        # date format is "2024-08-14T00:00:00.0000000"
         for date in unique_dates:
             date = date.split('T')[0]
             date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
@@ -159,7 +157,6 @@ def get_location_add_columns(ids):
             unique_days.add(day)
         days_offered_micro_braids = list(unique_days)
         people_offering_micro_braids = list(unique_employees)
-        # price ranges should be sorted in ascending order and should be in the format of "min-max"
         price_ranges_micro_braids = list(employee_prices)
         price_ranges_micro_braids.sort()
 
