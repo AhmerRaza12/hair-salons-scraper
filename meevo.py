@@ -32,8 +32,7 @@ driver=webdriver.Chrome(service=service, options=options)
 
 email = os.getenv("JCP_MEEVO_EMAIL")
 password = os.getenv("JCP_MEEVO_PASSWORD")
-print(email)
-print(password)
+
 
 store_names_extracted = []
 def login():
@@ -106,16 +105,32 @@ all_data=[]
 
 all_data=[]
 def get_micro_braids_data(ids):
-    for id in ids:
-        driver.get(f'https://jcp.meevo.com/CustomerPortal/onlinebooking/booking/guestinfo?tenantId=1&locationId={1013}')
+    for id in ids[724:]:
+        driver.get(f'https://jcp.meevo.com/CustomerPortal/onlinebooking/booking/guestinfo?tenantId=1&locationId={id}')
         time.sleep(15)
         if '/login' in driver.current_url:
             login()
         time.sleep(3)
         next_button = driver.find_element(By.XPATH, "//button[contains(.,'Next')]")
         next_button.click()
-        time.sleep(1)
-        textured_styling = driver.find_element(By.XPATH, "//div[.='Textured Styling']")
+        time.sleep(2)
+        try:
+            textured_styling = driver.find_element(By.XPATH, "//div[.='Textured Styling']")
+        except:
+            data={
+                "Number Of People Offering Micro Braids": '',
+                "Days Offering Micro Braids": '',
+                "Price Range": '',
+                "People Offering Micro Braids": ''     
+            }
+            print(data)
+            df=pd.read_excel('meevo_salons.xlsx')
+            df.loc[df['Id']==id,'Number Of People Offering Micro Braids']=''
+            df.loc[df['Id']==id,'Days Offering Micro Braids']=''
+            df.loc[df['Id']==id,'Price Range']=''
+            df.loc[df['Id']==id,'People Offering Micro Braids']=''
+            df.to_excel('meevo_salons.xlsx',index=False)
+            continue
         textured_styling.click()
         time.sleep(1)
         try:
@@ -143,7 +158,6 @@ def get_micro_braids_data(ids):
                 for person in people:
                     full_text = person.text
                     if full_text.startswith('with '):
-                        print(full_text)
                         name = full_text[5:].strip()
                         if name and name not in people_names:
                             people_names.append(name)
