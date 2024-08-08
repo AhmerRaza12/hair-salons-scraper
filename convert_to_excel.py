@@ -1,8 +1,8 @@
 import pandas as pd
 from openpyxl import Workbook
 
-df = pd.read_csv('meevo_salons.csv', encoding='utf-8')
-excel_file_path = 'meevo_salons.xlsx'
+df = pd.read_csv('uk_stores.csv', encoding='utf-8')
+excel_file_path = 'uk_stores.xlsx'
 wb = Workbook()
 
 ws = wb.active
